@@ -1,0 +1,335 @@
+---
+swagger: "2.0"
+info:
+  description: "GosUslugi-like site for MVD"
+  version: "0.0.1"
+  title: "Department API"
+host: "localhost:8080"
+basePath: "/server-0.1"
+tags:
+- name: "user"
+  description: "Actions with user"
+- name: "application"
+  description: "Actions with applications"
+schemes:
+- "https"
+produces:
+- "application/json"
+paths:
+  /application:
+    get:
+      tags:
+      - "application"
+      summary: "All the applications"
+      description: "The applications endpoint returns information about all the applications\n\
+        of the user.\n"
+      operationId: "applicationGET"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "authorization token."
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "An array of applications"
+          schema:
+            $ref: "#/definitions/Applications"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Application"
+    post:
+      tags:
+      - "application"
+      description: "Creates a new application.\n"
+      operationId: "applicationPOST"
+      parameters:
+      - in: "body"
+        name: "application"
+        description: "Application to add."
+        required: true
+        schema:
+          $ref: "#/definitions/NewApplication"
+      responses:
+        201:
+          description: "A fullfilled application"
+          schema:
+            $ref: "#/definitions/Application"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Application"
+  /application/{id}:
+    get:
+      tags:
+      - "application"
+      summary: "Get an application."
+      description: "Returns an application with specified id.\n"
+      operationId: "applicationIdGET"
+      parameters:
+      - name: "token"
+        in: "header"
+        description: "authorization token."
+        required: true
+        type: "string"
+        format: "string"
+      - name: "id"
+        in: "path"
+        description: "id."
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "An applications"
+          schema:
+            $ref: "#/definitions/Application"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Application"
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Registration."
+      description: "Creates a new user."
+      operationId: "userPOST"
+      parameters:
+      - name: "username"
+        in: "header"
+        description: "User's name to log in with."
+        required: true
+        type: "string"
+        format: "string"
+      - name: "password"
+        in: "header"
+        description: "User's password to log in with."
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "Created empty profile."
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+  /user/login:
+    post:
+      tags:
+      - "user"
+      summary: "Authorization"
+      description: "Authorizes the user."
+      operationId: "userLoginPOST"
+      parameters:
+      - name: "username"
+        in: "header"
+        description: "User's name to log in with."
+        required: true
+        type: "string"
+        format: "string"
+      - name: "password"
+        in: "header"
+        description: "User's password to log in with."
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "Authorization token."
+          schema:
+            $ref: "#/definitions/Token"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+  /user/profile:
+    post:
+      tags:
+      - "user"
+      summary: "Sends user information."
+      description: "Adds all the information about the user."
+      operationId: "userProfilePOST"
+      parameters:
+      - in: "body"
+        name: "profile"
+        description: "User's information to save."
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      - name: "token"
+        in: "header"
+        description: "User's token to identify him with."
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "Completed user."
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+definitions:
+  NewApplication:
+    type: "object"
+    properties:
+      mvdOfficeHead:
+        type: "string"
+        description: "The name of the head of the office."
+      weaponType:
+        type: "string"
+        description: "Type of the required weapon."
+      weaponModel:
+        type: "string"
+        description: "Model of weapon."
+      weaponCaliber:
+        type: "string"
+        description: "Caliber of the required weapon."
+      weaponCount:
+        type: "string"
+        description: "Count of the required weapon."
+      weaponPurchasePurpose:
+        type: "string"
+        description: "Weapon purchase purpose."
+      weaponStoragePlace:
+        type: "string"
+        description: "Place to store the weapon."
+  Application:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "unuque id of the application."
+      date:
+        type: "string"
+        description: "Date of sending."
+      mvdOfficeHead:
+        type: "string"
+        description: "The name of the head of the office."
+      weaponType:
+        type: "string"
+        description: "Type of the required weapon."
+      weaponModel:
+        type: "string"
+        description: "Model of weapon."
+      weaponCaliber:
+        type: "string"
+        description: "Caliber of the required weapon."
+      weaponCount:
+        type: "string"
+        description: "Count of the required weapon."
+      weaponPurchasePurpose:
+        type: "string"
+        description: "Weapon purchase purpose."
+      weaponStoragePlace:
+        type: "string"
+        description: "Place to store the weapon."
+  User:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+        description: "Authorization token."
+      name:
+        type: "string"
+        description: "User's name."
+      surname:
+        type: "string"
+        description: "User's surname."
+      middleName:
+        type: "string"
+        description: "User's middlename."
+      passportSeries:
+        type: "string"
+        description: "User's passport series"
+      passportNumber:
+        type: "string"
+        description: "User's passport number."
+      birthPlace:
+        type: "string"
+        description: "User's birth place."
+      currentAddress:
+        type: "string"
+        description: "User's current address."
+      email:
+        type: "string"
+        description: "User's email."
+      phoneNumber:
+        type: "string"
+        description: "User's phone number."
+      registrationAddress:
+        type: "string"
+        description: "User's registration address."
+      licenseType:
+        type: "string"
+        description: "License type."
+      licenseSeries:
+        type: "string"
+        description: "License series."
+      licenceNumber:
+        type: "string"
+        description: "Licence number."
+      licenceGivenDate:
+        type: "string"
+        description: "Licence given date"
+      mvdOfficeName:
+        type: "string"
+        description: "MVD office name."
+      personalOrNot:
+        type: "string"
+        description: "Is the weapon personal or not."
+      type:
+        type: "string"
+        description: "Type of the weapon."
+      model:
+        type: "string"
+        description: "Model of the weapon."
+      uniqueNumber:
+        type: "string"
+        description: "Unique number of the weapon."
+      resolutionSeries:
+        type: "string"
+        description: "The series of the resolution of the weapon."
+      resolutionNumber:
+        type: "string"
+        description: "The number of the resolution for the weapon."
+      resolutionWasGivenBy:
+        type: "string"
+        description: "Name of the organisation that gave the resolution."
+      resolutionGivenDate:
+        type: "string"
+        description: "Date when the resolution was given."
+  Applications:
+    type: "array"
+    items:
+      $ref: "#/definitions/Application"
+  Token:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+        description: "Authorization token"
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+      fields:
+        type: "string"
