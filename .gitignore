@@ -15,4 +15,4 @@ effective-settings.xml
 *.log
 *.lck
 *.jar
-/*/node_modules/
+/dep-api/nodejs-server-server/node_modules/*
